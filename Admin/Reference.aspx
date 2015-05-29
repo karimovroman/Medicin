@@ -65,20 +65,41 @@
         }
         void addstrax(Object sender, EventArgs e)
         {
-
             MySqlLib.MySqlData.MySqlExecute mysql = new MySqlLib.MySqlData.MySqlExecute();
-            int r = mysql.InsertStrax(Convert.ToInt32(idstrax.Text), namestrah.Text, address.Text);
-            List<MySqlLib.MySqlData.MySqlExecute.strahovay> lks = mysql.SelectStrah();
-            int maxl = 0;
-            strahlist.Items.Clear();
-            List<MySqlLib.MySqlData.MySqlExecute.strahovay> lk = lks.OrderBy(o => o.name).ToList();
-            foreach (MySqlLib.MySqlData.MySqlExecute.strahovay s in lk)
-            {
-                strahlist.Items.Add(new ListItem(s.name, Convert.ToString(s.id)));
-                if (s.id > maxl)
-                    maxl = s.id;
+               
+            if(addstraxbut.Text == "Добавить")
+            { 
+                int r = mysql.InsertStrax(Convert.ToInt32(idstrax.Text), namestrah.Text, address.Text);
+                List<MySqlLib.MySqlData.MySqlExecute.strahovay> lks = mysql.SelectStrah();
+                int maxl = 0;
+                strahlist.Items.Clear();
+                List<MySqlLib.MySqlData.MySqlExecute.strahovay> lk = lks.OrderBy(o => o.name).ToList();
+                foreach (MySqlLib.MySqlData.MySqlExecute.strahovay s in lk)
+                {
+                    strahlist.Items.Add(new ListItem(s.name, Convert.ToString(s.id)));
+                    if (s.id > maxl)
+                        maxl = s.id;
+                }
+                idstrax.Text = Convert.ToString(maxl + 1);
             }
-            idstrax.Text = Convert.ToString(maxl + 1);
+            if (addstraxbut.Text == "Сохранить изменения")
+            {
+                mysql.UpdateStrax(Convert.ToInt32(idstrax.Text), namestrah.Text, address.Text);
+                int maxl = 0;
+                strahlist.Items.Clear();
+                List<MySqlLib.MySqlData.MySqlExecute.strahovay> lks = mysql.SelectStrah();
+                List<MySqlLib.MySqlData.MySqlExecute.strahovay> lk = lks.OrderBy(o => o.name).ToList();
+                foreach (MySqlLib.MySqlData.MySqlExecute.strahovay s in lk)
+                {
+                    strahlist.Items.Add(new ListItem(s.name, Convert.ToString(s.id)));
+                    if (s.id > maxl)
+                        maxl = s.id;
+                }
+                idstrax.Text = Convert.ToString(maxl + 1);
+                namestrah.Text = "";
+                address.Text = "";
+                addstraxbut.Text = "Добавить";
+            }
 
         }
         void addsimptom(Object sender, EventArgs e)
@@ -129,7 +150,7 @@
         <asp:View ID="specdoctor" runat="server">
             <table style="width: 100%">
                 <tr>
-                    <td style="width: 50%">
+                    <td style="width: 50%; vertical-align:top">
                         <table style="vertical-align:top">
                             <tr>
                                 <td colspan="4">Добавить специализацию врача
@@ -151,7 +172,7 @@
                     </td>
                     <td style="width: 50%">
                         
-                                <asp:RadioButtonList ID="speclist" runat="server"></asp:RadioButtonList><br />
+                                <asp:CheckBoxList ID="speclist" runat="server"></asp:CheckBoxList><br />
                                 <asp:ImageButton ToolTip="Удалить" ID="del" runat="server" ImageUrl="~/images/del.png"  OnClick="del_Click" /><a style="margin-left:10px"></a>
                                 <asp:ImageButton ToolTip="Редактировать" ID="edit" runat="server" ImageUrl="~/images/edit.png"  OnClick="edit_Click" /></td>
                        
@@ -222,7 +243,7 @@
                         </table>
                     </td>
                     <td style="vertical-align:top;margin-left:30px">
-                        <asp:RadioButtonList ID="leklist" runat="server"></asp:RadioButtonList><br /><asp:ImageButton ID="del2" runat="server" ImageUrl="~/images/del.png" OnClick="del2_Click" /><a style="margin-left:10px"></a>
+                        <asp:CheckBoxList ID="leklist" runat="server"></asp:CheckBoxList><br /><asp:ImageButton ID="del2" runat="server" ImageUrl="~/images/del.png" OnClick="del2_Click" /><a style="margin-left:10px"></a>
                                 <asp:ImageButton ToolTip="Редактировать" ID="edit2" runat="server" ImageUrl="~/images/edit.png"  OnClick="edit2_Click" /></td>
                 </tr>
             </table>
@@ -286,7 +307,7 @@
                                 <td colspan="2" style="width: 300px; text-align: center">Блок заболевания (МКБ-10)
                         <div style="height: 200px; overflow-y: auto; text-align: left">
 
-                            <asp:RadioButtonList ID="blokdiag" runat="server"></asp:RadioButtonList>
+                            <asp:CheckBoxList ID="blokdiag" runat="server"></asp:CheckBoxList>
                         </div>
                                 </td>
                             </tr>
@@ -299,7 +320,7 @@
                         </table>
                     </td>
                     <td style="width: 50%;vertical-align:top">
-                        <asp:RadioButtonList ID="diaglist" runat="server"></asp:RadioButtonList><br />
+                        <asp:CheckBoxList ID="diaglist" runat="server"></asp:CheckBoxList><br />
                         <asp:ImageButton ID="del3" runat="server" ImageUrl="~/images/del.png" OnClick="del3_Click" />
                         <a style="margin-left:10px"></a>
                                 <asp:ImageButton ToolTip="Редактировать" ID="edit3" runat="server" ImageUrl="~/images/edit.png"  OnClick="edit3_Click" /></td>
@@ -309,7 +330,7 @@
         <asp:View ID="simptomi" runat="server">
             <table>
                 <tr>
-                    <td>
+                    <td style="vertical-align:top">
                         <table style="width: 400px;vertical-align:top">
                             <tr>
                                 <td colspan="2" style="border-bottom: inset"></td>
@@ -347,8 +368,8 @@
                         </table>
                     </td>
                     <td style="vertical-align:top">
-                        <asp:RadioButtonList ID="simptlist" runat="server">
-                        </asp:RadioButtonList><br /><asp:ImageButton ID="del4" runat="server" ImageUrl="~/images/del.png" OnClick="del4_Click" />
+                        <asp:CheckBoxList ID="simptlist" runat="server">
+                        </asp:CheckBoxList><br /><asp:ImageButton ID="del4" runat="server" ImageUrl="~/images/del.png" OnClick="del4_Click" />
                    <a style="margin-left:10px"></a>
                                 <asp:ImageButton ToolTip="Редактировать" ID="edit4" runat="server" ImageUrl="~/images/edit.png"  OnClick="edit4_Click" /></td>
                 </tr>
@@ -387,14 +408,14 @@
                 </tr>
                 <tr>
                     <td style="text-align: right" colspan="2">
-                        <asp:Button ID="Button3" runat="server" Text="Добавить" OnClick="addstrax" />
+                        <asp:Button ID="addstraxbut" runat="server" Text="Добавить" OnClick="addstrax" />
                     </td>
                 </tr>
             </table>
                         </td>
                     <td>    
-                         <asp:RadioButtonList ID="strahlist" runat="server">
-                        </asp:RadioButtonList><br /><asp:ImageButton ID="del5" runat="server" ImageUrl="~/images/del.png" OnClick="del5_Click" />
+                         <asp:CheckBoxList ID="strahlist" runat="server">
+                        </asp:CheckBoxList><br /><asp:ImageButton ID="del5" runat="server" ImageUrl="~/images/del.png" OnClick="del5_Click" />
                    <a style="margin-left:10px"></a>
                                 <asp:ImageButton ToolTip="Редактировать" ID="edit5" runat="server" ImageUrl="~/images/edit.png"  OnClick="edit5_Click" /></td>
                 </tr>

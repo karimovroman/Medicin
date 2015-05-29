@@ -547,26 +547,39 @@ public partial class Admin_reference : System.Web.UI.Page
     }
     protected void del_Click(object sender, ImageClickEventArgs e)
     {
-        MySqlLib.MySqlData.MySqlExecute mysql = new MySqlLib.MySqlData.MySqlExecute();
-        mysql.DeleteDoctor(Convert.ToInt32(speclist.SelectedValue));
-        //Page_Load(new object(), new EventArgs());
-        int maxl = 0;
-        speclist.Items.Clear();
-        List<MySqlLib.MySqlData.MySqlExecute.specdoctor> sps = mysql.SelectSpecDoctor();
-        List<MySqlLib.MySqlData.MySqlExecute.specdoctor> sp = sps.OrderBy(o => o.name).ToList();
-        foreach (MySqlLib.MySqlData.MySqlExecute.specdoctor s in sp)
-        {
-            speclist.Items.Add(new ListItem(s.name, Convert.ToString(s.id)));
-            if (s.id > maxl)
-                maxl = s.id;
-        }
-        idspec.Text = Convert.ToString(maxl + 1);
-     
+            
+            MySqlLib.MySqlData.MySqlExecute mysql = new MySqlLib.MySqlData.MySqlExecute();
+            for (int i = 0; i < speclist.Items.Count; i++)
+            {     
+                if (speclist.Items[i].Selected == true)
+                { 
+                    mysql.DeleteDoctor(Convert.ToInt32(speclist.Items[i].Value));
+                }
+            }
+            //Page_Load(new object(), new EventArgs());
+            int maxl = 0;
+            speclist.Items.Clear();
+            List<MySqlLib.MySqlData.MySqlExecute.specdoctor> sps = mysql.SelectSpecDoctor();
+            List<MySqlLib.MySqlData.MySqlExecute.specdoctor> sp = sps.OrderBy(o => o.name).ToList();
+            foreach (MySqlLib.MySqlData.MySqlExecute.specdoctor s in sp)
+            {
+                speclist.Items.Add(new ListItem(s.name, Convert.ToString(s.id)));
+                if (s.id > maxl)
+                    maxl = s.id;
+            }
+            idspec.Text = Convert.ToString(maxl + 1);
+        
     }
     protected void del2_Click(object sender, ImageClickEventArgs e)
     {
         MySqlLib.MySqlData.MySqlExecute mysql = new MySqlLib.MySqlData.MySqlExecute();
-        mysql.DeleteLek(Convert.ToInt32(leklist.SelectedValue));
+        for (int i = 0; i < leklist.Items.Count; i++)
+        {
+            if (leklist.Items[i].Selected == true)
+            {
+                mysql.DeleteLek(Convert.ToInt32(leklist.Items[i].Value));
+            }
+        }
         //Page_Load(new object(), new EventArgs());
         List<MySqlLib.MySqlData.MySqlExecute.lekarstvo> lks = mysql.SelectLekarstvo();
         List<MySqlLib.MySqlData.MySqlExecute.lekarstvo> lk = lks.OrderBy(o => o.name).ToList();
@@ -585,7 +598,13 @@ public partial class Admin_reference : System.Web.UI.Page
     protected void del3_Click(object sender, ImageClickEventArgs e)
     {
         MySqlLib.MySqlData.MySqlExecute mysql = new MySqlLib.MySqlData.MySqlExecute();
-        mysql.DeleteDiag(Convert.ToInt32(diaglist.SelectedValue));
+        for (int i = 0; i < diaglist.Items.Count; i++)
+        {
+            if (diaglist.Items[i].Selected == true)
+            {
+                mysql.DeleteDiag(Convert.ToInt32(diaglist.Items[i].Value));
+            }
+        } 
        // Page_Load(new object(), new EventArgs());
         List<MySqlLib.MySqlData.MySqlExecute.zabdiagnoz> zds = mysql.SelectZabDiagnoz();
         List<MySqlLib.MySqlData.MySqlExecute.zabdiagnoz> zd = zds.OrderBy(o => o.name).ToList();
@@ -602,7 +621,13 @@ public partial class Admin_reference : System.Web.UI.Page
     protected void del4_Click(object sender, ImageClickEventArgs e)
     {
         MySqlLib.MySqlData.MySqlExecute mysql = new MySqlLib.MySqlData.MySqlExecute();
-        mysql.DeleteSimptom(Convert.ToInt32(simptlist.SelectedValue));
+        for (int i = 0; i < simptlist.Items.Count; i++)
+        {
+            if (simptlist.Items[i].Selected == true)
+            {
+                mysql.DeleteSimptom(Convert.ToInt32(simptlist.Items[i].Value));
+            }
+        } 
         //Page_Load(new object(), new EventArgs());
         List<MySqlLib.MySqlData.MySqlExecute.simptoms> lks = mysql.SelectSimptoms();
         List<MySqlLib.MySqlData.MySqlExecute.simptoms> lk = lks.OrderBy(o => o.name).ToList();
@@ -619,7 +644,13 @@ public partial class Admin_reference : System.Web.UI.Page
     protected void del5_Click(object sender, ImageClickEventArgs e)
     {
         MySqlLib.MySqlData.MySqlExecute mysql = new MySqlLib.MySqlData.MySqlExecute();
-        mysql.DeleteStrah(Convert.ToInt32(strahlist.SelectedValue));
+        for (int i = 0; i < strahlist.Items.Count; i++)
+        {
+            if (strahlist.Items[i].Selected == true)
+            {
+                mysql.DeleteStrah(Convert.ToInt32(strahlist.Items[i].Value));
+            }
+        } 
         //Page_Load(new object(), new EventArgs());
         List<MySqlLib.MySqlData.MySqlExecute.strahovay> lks = mysql.SelectStrah();
         List<MySqlLib.MySqlData.MySqlExecute.strahovay> lk = lks.OrderBy(o => o.name).ToList();
@@ -633,9 +664,13 @@ public partial class Admin_reference : System.Web.UI.Page
         }
         idstrax.Text = Convert.ToString(maxl + 1);
     }
+
+
+    //Команды редактирования 
+
     protected void edit_Click(object sender, ImageClickEventArgs e)
     {
-
+       
     }
     protected void edit2_Click(object sender, ImageClickEventArgs e)
     {
@@ -651,6 +686,43 @@ public partial class Admin_reference : System.Web.UI.Page
     }
     protected void edit5_Click(object sender, ImageClickEventArgs e)
     {
+        MySqlLib.MySqlData.MySqlExecute mysql = new MySqlLib.MySqlData.MySqlExecute();
+        MySqlLib.MySqlData.MySqlExecute.strahovay strah = new MySqlLib.MySqlData.MySqlExecute.strahovay();
+        List<MySqlLib.MySqlData.MySqlExecute.strahovay> strahs = new List<MySqlLib.MySqlData.MySqlExecute.strahovay>();
+        strahs = mysql.SelectStrah();
+        for (int i = 0; i < strahlist.Items.Count; i++)
+        {
+            if (strahlist.Items[i].Selected == true)
+            {
+                foreach (MySqlLib.MySqlData.MySqlExecute.strahovay str in strahs)
+                    if (str.id == Convert.ToInt32(strahlist.Items[i].Value))
+                    {
+                        strah = str;
+                        break;
+                    }
+            }
+            if (strah.id != 0)
+            {
+                break;
+            }
+        }
+        if (strah.id != 0)
+        {
+            idstrax.Text = Convert.ToString(strah.id);
+            namestrah.Text = strah.name;
+            address.Text = strah.address;
+            addstraxbut.Text = "Сохранить изменения";
+        }
+        int maxl = 0;
+        strahlist.Items.Clear();
+        List<MySqlLib.MySqlData.MySqlExecute.strahovay> lks = mysql.SelectStrah();
+        List<MySqlLib.MySqlData.MySqlExecute.strahovay> lk = lks.OrderBy(o => o.name).ToList();
+        foreach (MySqlLib.MySqlData.MySqlExecute.strahovay s in lk)
+        {
+            strahlist.Items.Add(new ListItem(s.name, Convert.ToString(s.id)));
+            if (s.id > maxl)
+                maxl = s.id;
+        }
 
     }
 }

@@ -293,7 +293,7 @@ namespace MySqlLib
                 }
                 finally
                 {
-
+                    command.Connection.Close();
                 }
             }
             /// <summary>
@@ -336,7 +336,7 @@ namespace MySqlLib
                 }
                 finally
                 {
-
+                    command.Connection.Close();
                 }
             }
             /// <summary>
@@ -380,7 +380,7 @@ namespace MySqlLib
                 }
                 finally
                 {
-
+                    command.Connection.Close();
                 }
             }
             /// <summary>
@@ -423,7 +423,7 @@ namespace MySqlLib
                 }
                 finally
                 {
-
+                    command.Connection.Close();
                 }
             }
             /// <summary>
@@ -466,7 +466,7 @@ namespace MySqlLib
                 }
                 finally
                 {
-
+                    command.Connection.Close();
                 }
             }
 
@@ -497,7 +497,7 @@ namespace MySqlLib
                 }
                 finally
                 {
-
+                    command.Connection.Close();
                 }
             }
             public int DeleteLek(int id)
@@ -527,7 +527,7 @@ namespace MySqlLib
                 }
                 finally
                 {
-
+                    command.Connection.Close();
                 }
             }
             public int DeleteDiag(int id)
@@ -566,7 +566,7 @@ namespace MySqlLib
                 }
                 finally
                 {
-
+                    command.Connection.Close();
                 }
             }
             public int DeleteStrah(int id)
@@ -596,7 +596,7 @@ namespace MySqlLib
                 }
                 finally
                 {
-
+                    command.Connection.Close();
                 }
             }
             public int DeleteSimptom(int id)
@@ -626,7 +626,7 @@ namespace MySqlLib
                 }
                 finally
                 {
-
+                    command.Connection.Close();
                 }
             }
 
@@ -662,7 +662,7 @@ namespace MySqlLib
                 }
                 finally
                 {
-
+                    command.Connection.Close();
                 }
             }
             public int InsertSimptoms(int id, string name, string about)
@@ -695,7 +695,7 @@ namespace MySqlLib
                 }
                 finally
                 {
-
+                    command.Connection.Close();
                 }
             }
             public int InsertStrax(int id, string name, string address)
@@ -728,7 +728,7 @@ namespace MySqlLib
                 }
                 finally
                 {
-
+                    command.Connection.Close();
                 }
             }
             public int InsertLek(int id, string name, string doza, string type)
@@ -944,7 +944,7 @@ namespace MySqlLib
             {
 
                 //Команды создающие таблицы
-                string zab_class = "insert into lekarstvo (id, name, doza, type) values (@id, @name, @doza, @type);";
+                string zab_class = "update lekarstvo set name = @name, doza = @doza,type = @type where id = @id;";
 
                 MySqlCommand command = new MySqlCommand();
                 MySqlConnection connection = new MySqlConnection(connect);
@@ -974,7 +974,7 @@ namespace MySqlLib
                 catch (Exception e)
                 {
 
-                    throw new ApplicationException("Ошибка данныx mysql. Добавление лекарства" + e.Message);
+                    throw new ApplicationException("Ошибка данныx mysql. Обновление лекарства" + e.Message);
                 }
                 finally
                 {
@@ -985,7 +985,7 @@ namespace MySqlLib
             {
 
                 //Команды создающие таблицы
-                string zab_class = "insert into zabdiagnoz (id, idbloc, name, number, about) values (@id, @idbloc, @name, @number, @about);";
+                string zab_class = "update zabdiagnoz set idbloc = @idbloc, name = @name, number = @number, about = @about);";
 
                 MySqlCommand command = new MySqlCommand();
                 MySqlConnection connection = new MySqlConnection(connect);
@@ -1010,18 +1010,20 @@ namespace MySqlLib
                 catch (Exception e)
                 {
 
-                    throw new ApplicationException("Ошибка данныx mysql. Добавление нового диагноза" + e.Message);
+                    throw new ApplicationException("Ошибка данныx mysql. Обновление диагноза" + e.Message);
                 }
                 finally
                 {
 
                 }
             }
-            public int UpdateDSimptom(int idd, int ids)
+            
+            
+            public int DeleteDSimptom(int idd, int ids)
             {
 
                 //Команды создающие таблицы
-                string zab_class = "insert into zabsimptom(iddiagnoz, idsim) values ( @iddiagnoz, @idsim) ;";
+                string zab_class = "delete from zabsimptom where iddiagnoz = @iddiagnoz ;";
 
                 MySqlCommand command = new MySqlCommand();
                 MySqlConnection connection = new MySqlConnection(connect);
@@ -1029,8 +1031,7 @@ namespace MySqlLib
                 command.Connection = connection;
                 command.Parameters.Add(new MySqlParameter("@iddiagnoz", MySqlDbType.Int32, 3));
                 command.Parameters["@iddiagnoz"].Value = idd;
-                command.Parameters.Add(new MySqlParameter("@idsim", MySqlDbType.Int32, 3));
-                command.Parameters["@idsim"].Value = ids;
+                
                 try
                 {
                     connection.Open();
@@ -1040,7 +1041,7 @@ namespace MySqlLib
                 catch
                 {
 
-                    throw new ApplicationException("Ошибка данныx mysql. Добавление симптомов к диагнозу");
+                    throw new ApplicationException("Ошибка данныx mysql. Удаление всех симптомов к диагнозу");
                 }
                 finally
                 {
