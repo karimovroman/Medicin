@@ -1,0 +1,7 @@
+
+# WebMatrix 1.0
+User-agent: * 
+Disallow: /App_Code
+Disallow: /App_Data
+
+Host: www.*.ru

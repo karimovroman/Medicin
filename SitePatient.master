@@ -1,0 +1,177 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="SitePatient.master.cs" Inherits="SiteMaster" %>
+
+<!DOCTYPE html>
+
+<html lang="ru">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%: Page.Title %> - ASP.NET</title>
+
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
+    <webopt:bundlereference runat="server" path="~/Content/css" />
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="css/style.css" rel="stylesheet" type="text/css">
+         <!--Скрипты jquery. загрузка после страницы -->
+      <script type="text/javascript">
+          $(function () {
+              $("#accordion").accordion();
+          });
+</script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.view-source .hide').hide();
+            $('.view-source a').on('click', function () {
+                $('.view-source .hide').slideUp(500);
+                $(this).parent().find('.hide').slideDown(500);
+            });
+        });
+	</script>
+
+</head>
+<body>
+    <form runat="server">
+        <asp:ScriptManager runat="server">
+            
+            <Scripts>
+                <%--Дополнительные сведения об объединении сценариев в ScriptManager см. по адресу: http://go.microsoft.com/fwlink/?LinkID=301884 --%>
+                <%--Сценарии .NET Framework--%>
+                <asp:ScriptReference Name="MsAjaxBundle" />
+                <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="bootstrap" />
+                <asp:ScriptReference Name="respond" />
+                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
+                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
+                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
+                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
+                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
+                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
+                <asp:ScriptReference Name="WebFormsBundle" />
+                <%--Сценарии сайта--%>
+            </Scripts>
+        </asp:ScriptManager>
+        <script>
+            $(function () {
+                $("#dateoms").datepicker();
+            
+                $("#daterozden").datepicker();
+          
+                $("#kogdavid").datepicker();
+            });
+
+</script>
+        <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="1">
+        <div style="position:absolute; width:302px; top:30px; background:url(images/cn-bg.gif);">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="1"><img src="images/logo.gif" alt="" width="61" height="61" class="logo"></td>
+    <td class="company_name">MedSoft</td>
+  </tr>
+</table>
+        </div>
+        <div id="slogan" style="width:500px"><asp:Label ID="welcome" Width="300px" Text="Добро пожаловать " runat="server"></asp:Label><asp:LinkButton ID="LinkButton1" Font-Bold="false" Text="Сменить пароль "  PostBackUrl="~/passwordchange.aspx" runat="server"></asp:LinkButton> <asp:LinkButton ID="exit" Font-Bold="false" Text="Выход" PostBackUrl="~/logout.aspx" runat="server"></asp:LinkButton> <br>
+        <img src="images/w17.gif" width="17" height="1"></div>
+        <img src="images/p1.jpg" alt="" width="666" height="196"></td>
+        <td class="hbg">
+                    <asp:LoginView runat="server" ViewStateMode="Disabled" Visible="false">
+                        <AnonymousTemplate>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a runat="server" href="~/Account/Register">Регистрация</a></li>
+                                <li><a runat="server" href="~/Account/Login">Вход</a></li>
+                            </ul>
+                        </AnonymousTemplate>
+                        <LoggedInTemplate>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a runat="server" href="~/Account/Manage" title="Manage your account">Hello, <%: Context.User.Identity.GetUserName()  %>!</a></li>
+                                <li>
+                                    <asp:LoginStatus runat="server" LogoutAction="Redirect" LogoutText="Выход" LogoutPageUrl="~/" OnLoggingOut="Unnamed_LoggingOut" />
+                                </li>
+                            </ul>
+                        </LoggedInTemplate>
+                    </asp:LoginView>
+        </td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td height="100%" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="188" valign="top">
+        <div style="position:relative; top:-69px; width:188px;">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="mbg"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td><img src="images/spacer.gif" alt="" width="1" height="14"></td>
+      </tr>
+     
+      <tr>
+        <td height="1"><img src="images/m-sep0.gif" width="188" height="1"></td>
+      </tr>
+      <tr>
+        <td class="menu"><a href="/recordmo.aspx">Записаться</a></td>
+      </tr>
+      <tr>
+        <td height="1"><img src="images/m-sep.gif" width="188" height="1"></td>
+      </tr>
+        <tr>
+        <td class="menu"><a href="/services.aspx">Платные услуги</a></td>
+      </tr>
+      <tr>
+        <td height="1"><img src="images/m-sep.gif" width="188" height="1"></td>
+      </tr>
+      <tr>
+        <td class="menu"><a href="/myinformation.aspx">Мои данные</a></td>
+      </tr>
+      <tr>
+        <td height="1"><img src="images/m-sep.gif" width="188" height="1"></td>
+      </tr>
+      <tr>
+        <td class="menu"><a href="/mycard.aspx">Моя медкарта</a></td>
+      </tr>
+      <tr>
+        <td height="1"><img src="images/m-sep.gif" width="188" height="1"></td>
+      </tr>
+        <tr>
+        <td class="menu"><a href="/sms.aspx">Сообщения</a></td>
+      </tr>
+      <tr>
+        <td height="1"><img src="images/m-sep.gif" width="188" height="1"></td>
+      </tr>
+      <tr>
+        <td><img src="images/spacer.gif" alt="" width="1" height="12"></td>
+      </tr>
+    </table></td>
+  </tr>
+  <tr>
+    <td align="right" bgcolor="#FFFFFF"><img src="images/m-bottom.gif" alt="" width="156" height="110"></td>
+  </tr>
+</table>
+
+        </div>
+        </td>
+        <td valign="top"><div class="container body-content">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+            <hr />
+            <footer>
+                <p></p>
+            </footer>
+        </div>
+</td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+    </form>
+</body>
+</html>
