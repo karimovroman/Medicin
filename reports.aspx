@@ -48,7 +48,7 @@ font-weight:bold;
                 </a>
             </td>
         </tr>
-        <tr>
+        <tr style="visibility:hidden">
             <td>
                 <a href="moreport.aspx">
                     <div class="blok">

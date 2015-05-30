@@ -240,6 +240,12 @@ namespace MySqlLib
                 public int id;
                 public string name;
             }
+            public class zabdsimptom
+            {
+                public int id;
+                public int ids;
+                public int idd;
+            }
             public class lekarstvo
             {
                 public int id;
@@ -838,7 +844,47 @@ namespace MySqlLib
 
                 }
             }
-           
+            public List<zabdsimptom> SelectDSimptom(int idd)
+            {
+
+                //Команды создающие таблицы
+                string zab_class = "Select * from zabsimptom where iddiagnoz= @iddiagnoz ;";
+
+                MySqlCommand command = new MySqlCommand();
+                MySqlConnection connection = new MySqlConnection(connect);
+                command.CommandText = zab_class;
+                command.Connection = connection;
+                command.Parameters.Add(new MySqlParameter("@iddiagnoz", MySqlDbType.Int32, 3));
+                command.Parameters["@iddiagnoz"].Value = idd;
+                MySqlDataReader reader;
+
+                List<zabdsimptom> clas = new List<zabdsimptom>();
+                try
+                {
+
+                    command.Connection.Open();
+                    reader = command.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        zabdsimptom z = new zabdsimptom();
+                        z.id = Convert.ToInt32(reader["id"]);
+                        z.idd = Convert.ToInt32(reader["iddiagnoz"]);
+                        z.ids = Convert.ToInt32(reader["idsim"]);
+                        clas.Add(z);
+                    }
+                    reader.Close();
+                    return clas;
+                }
+                catch(Exception e)
+                {
+
+                    throw new ApplicationException("Ошибка данныx mysql. Вывод симптомов диагноза" + e.Message);
+                }
+                finally
+                {
+
+                }
+            }
             //
             //Сектор Update
             //

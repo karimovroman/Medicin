@@ -5,25 +5,50 @@
     <script runat="server">
         void addspeccom(Object sender, EventArgs e)
         {
-            MySqlLib.MySqlData.MySqlExecute mysql = new MySqlLib.MySqlData.MySqlExecute();
-            int maxl = 0;
-            int r = mysql.InsertSpecDoctor(Convert.ToInt32(idspec.Text), namespec.Text);
-            speclist.Items.Clear();
-            List<MySqlLib.MySqlData.MySqlExecute.specdoctor> sps = mysql.SelectSpecDoctor();
-            List<MySqlLib.MySqlData.MySqlExecute.specdoctor> sp = sps.OrderBy(o => o.name).ToList();
+             MySqlLib.MySqlData.MySqlExecute mysql = new MySqlLib.MySqlData.MySqlExecute();
+
+             if (addspec.Text == "Добавить")
+            { 
+                int maxl = 0;
+                int r = mysql.InsertSpecDoctor(Convert.ToInt32(idspec.Text), namespec.Text);
+                speclist.Items.Clear();
+                List<MySqlLib.MySqlData.MySqlExecute.specdoctor> sps = mysql.SelectSpecDoctor();
+                List<MySqlLib.MySqlData.MySqlExecute.specdoctor> sp = sps.OrderBy(o => o.name).ToList();
         
-            foreach (MySqlLib.MySqlData.MySqlExecute.specdoctor s in sp)
+                foreach (MySqlLib.MySqlData.MySqlExecute.specdoctor s in sp)
+                {
+                    speclist.Items.Add(new ListItem(s.name, Convert.ToString(s.id)));
+                    if (s.id > maxl)
+                        maxl = s.id;
+                }
+                idspec.Text = Convert.ToString(maxl + 1);
+                }
+            if (addspec.Text == "Сохранить изменения")
             {
-                speclist.Items.Add(new ListItem(s.name, Convert.ToString(s.id)));
-                if (s.id > maxl)
-                    maxl = s.id;
+                mysql.UpdateSpecDoctor(Convert.ToInt32(idspec.Text), namespec.Text);
+                int maxl = 0;
+                speclist.Items.Clear();
+                List<MySqlLib.MySqlData.MySqlExecute.specdoctor> lks = mysql.SelectSpecDoctor();
+                List<MySqlLib.MySqlData.MySqlExecute.specdoctor> lk = lks.OrderBy(o => o.name).ToList();
+                foreach (MySqlLib.MySqlData.MySqlExecute.specdoctor s in lk)
+                {
+                    speclist.Items.Add(new ListItem(s.name, Convert.ToString(s.id)));
+                    if (s.id > maxl)
+                        maxl = s.id;
+                }
+                idspec.Text = Convert.ToString(maxl + 1);
+                namespec.Text = "";
+                
+                addspec.Text = "Добавить";
             }
-            idspec.Text = Convert.ToString(maxl + 1);
         }
         void adddiag(Object sender, EventArgs e)
         {
+             MySqlLib.MySqlData.MySqlExecute mysql = new MySqlLib.MySqlData.MySqlExecute();
+
+             if (adddiagnoz.Text == "Добавить")
+            { 
             int f = 0; int maxl = 0;
-            MySqlLib.MySqlData.MySqlExecute mysql = new MySqlLib.MySqlData.MySqlExecute();
             int r = mysql.InsertDiagnoz(Convert.ToInt32(iddiag.Text), named.Text, number.Text, about.Text, Convert.ToInt32(blokdiag.SelectedValue));
             if (r != 0)
             {
@@ -44,11 +69,32 @@
                     maxd = s.id;
             }
             iddiag.Text = Convert.ToString(zd.Count);
-
+            }
+             if (adddiagnoz.Text == "Сохранить изменения")
+             {
+                 mysql.UpdateDiagnoz(Convert.ToInt32(iddiag.Text), named.Text, number.Text, about.Text, Convert.ToInt32(blokdiag.SelectedValue));
+                 int maxl = 0;
+                 diaglist.Items.Clear();
+                 List<MySqlLib.MySqlData.MySqlExecute.zabdiagnoz> lks = mysql.SelectZabDiagnoz();
+                 List<MySqlLib.MySqlData.MySqlExecute.zabdiagnoz> lk = lks.OrderBy(o => o.name).ToList();
+                 foreach (MySqlLib.MySqlData.MySqlExecute.zabdiagnoz s in lk)
+                 {
+                     diaglist.Items.Add(new ListItem(s.name, Convert.ToString(s.id)));
+                     if (s.id > maxl)
+                         maxl = s.id;
+                 }
+                 iddiag.Text = Convert.ToString(maxl + 1);
+                 named.Text = "";
+                 number.Text = "";
+                 about.Text = "";
+                 adddiagnoz.Text = "Добавить";
+             }
         }
         void addlek(Object sender, EventArgs e)
-        {
-            MySqlLib.MySqlData.MySqlExecute mysql = new MySqlLib.MySqlData.MySqlExecute();
+        {  MySqlLib.MySqlData.MySqlExecute mysql = new MySqlLib.MySqlData.MySqlExecute();
+
+             if (addlekarstvo.Text == "Добавить")
+            {
             leklist.Items.Clear();
             int r = mysql.InsertLek(Convert.ToInt32(idlek.Text), namelek.Text, dozlek.Text, typelek.Text);
             List<MySqlLib.MySqlData.MySqlExecute.lekarstvo> lks = mysql.SelectLekarstvo();
@@ -62,6 +108,29 @@
                     maxl = s.id;
             }
             idlek.Text = Convert.ToString(maxl + 1);
+            }
+             if (addlekarstvo.Text == "Сохранить изменения")
+             {
+                 mysql.UpdateLek(Convert.ToInt32(idlek.Text), namelek.Text, dozlek.Text, typelek.Text);
+                 int maxl = 0;
+                 leklist.Items.Clear();
+                 List<MySqlLib.MySqlData.MySqlExecute.lekarstvo> lks = mysql.SelectLekarstvo();
+                 List<MySqlLib.MySqlData.MySqlExecute.lekarstvo> lk = lks.OrderBy(o => o.name).ToList();
+                 foreach (MySqlLib.MySqlData.MySqlExecute.lekarstvo s in lk)
+                 {
+                     leklist.Items.Add(new ListItem(s.name, Convert.ToString(s.id)));
+                     if (s.id > maxl)
+                         maxl = s.id;
+                 }
+                 idlek.Text = Convert.ToString(maxl + 1);
+                 namelek.Text = "";
+                 dozlek.Text = "";
+                 for (int i = 0; i < leklist.Items.Count;i++ )
+                 {
+                     leklist.Items[i].Selected = false;
+                 }
+                     addlekarstvo.Text = "Добавить";
+             }
         }
         void addstrax(Object sender, EventArgs e)
         {
@@ -103,9 +172,12 @@
 
         }
         void addsimptom(Object sender, EventArgs e)
-        {
-            int maxl = 0;
+        { 
             MySqlLib.MySqlData.MySqlExecute mysql = new MySqlLib.MySqlData.MySqlExecute();
+               
+            if(addsim.Text == "Добавить")
+            { 
+            int maxl = 0;
             int r = mysql.InsertSimptoms(Convert.ToInt32(idsimp.Text), namesimp.Text, aboutsimp.Text);
             
              List<MySqlLib.MySqlData.MySqlExecute.simptoms> lks = mysql.SelectSimptoms();
@@ -118,7 +190,25 @@
                     maxl = s.id;
             }
             idsimp.Text = Convert.ToString(maxl + 1);
-            
+            }
+            if (addsim.Text == "Сохранить изменения")
+            {
+                mysql.UpdateSimptoms(Convert.ToInt32(idsimp.Text), namesimp.Text, aboutsimp.Text);
+                int maxl = 0;
+                simptlist.Items.Clear();
+                List<MySqlLib.MySqlData.MySqlExecute.simptoms> lks = mysql.SelectSimptoms();
+                List<MySqlLib.MySqlData.MySqlExecute.simptoms> lk = lks.OrderBy(o => o.name).ToList();
+                foreach (MySqlLib.MySqlData.MySqlExecute.simptoms s in lk)
+                {
+                    simptlist.Items.Add(new ListItem(s.name, Convert.ToString(s.id)));
+                    if (s.id > maxl)
+                        maxl = s.id;
+                }
+                idsimp.Text = Convert.ToString(maxl + 1);
+                namesimp.Text = "";
+                aboutsimp.Text = "";
+                addsim.Text = "Добавить";
+            }
            
             
             
@@ -236,7 +326,7 @@
                             </tr>
                             <tr>
                                 <td  style="text-align: right">
-                                    <asp:Button ID="Button1" runat="server" Text="Добавить" OnClick="addlek" />
+                                    <asp:Button ID="addlekarstvo" runat="server" Text="Добавить" OnClick="addlek" />
                                 </td>
 
                             </tr>
@@ -307,13 +397,13 @@
                                 <td colspan="2" style="width: 300px; text-align: center">Блок заболевания (МКБ-10)
                         <div style="height: 200px; overflow-y: auto; text-align: left">
 
-                            <asp:CheckBoxList ID="blokdiag" runat="server"></asp:CheckBoxList>
+                            <asp:RadioButtonList ID="blokdiag" runat="server"></asp:RadioButtonList>
                         </div>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="2" style="vertical-align: bottom">
-                                    <asp:Button ID="Button2" runat="server" Text="Добавить" OnClick="adddiag" />
+                                    <asp:Button ID="adddiagnoz" runat="server" Text="Добавить" OnClick="adddiag" />
                                 </td>
 
                             </tr>
@@ -360,7 +450,7 @@
                             </tr>
                             <tr>
                                 <td colspan="2" style="text-align: right">
-                                    <asp:Button runat="server" Text="Добавить" OnClick="addsimptom" />
+                                    <asp:Button ID="addsim" runat="server" Text="Добавить" OnClick="addsimptom" />
 
 
                                 </td>
